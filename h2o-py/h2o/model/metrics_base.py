@@ -212,7 +212,6 @@ class MetricsBase(object):
         """
         return self._metric_json['mean_per_class_error']
 
-
 class H2ORegressionModelMetrics(MetricsBase):
     """
     This class provides an API for inspecting the metrics returned by a regression model.
