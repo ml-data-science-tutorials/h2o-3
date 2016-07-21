@@ -2137,7 +2137,9 @@ public class DeepLearningTest extends TestUtil {
       String[] fullDomain = train.vec("pclass").domain(); //actual
 
       ModelMetricsMultinomial mm = ModelMetricsMultinomial.make(preds, labels, fullDomain);
-      Log.info(mm.toString());
+      Log.info("mm  : Mean Per Class Error = " + mm._mean_per_class_error);
+      Log.info("mm  : Hit Ratios = " + mm._hit_ratios);
+      Log.info("mm  : Hit Ratios = " + mm._logloss);
     } finally {
       if (model!=null)  model.delete();
       if (preds!=null)  preds.remove();
@@ -2176,10 +2178,14 @@ public class DeepLearningTest extends TestUtil {
       String[] fullDomain = train.vec("survived").domain(); //actual
 
       ModelMetricsBinomial mm = ModelMetricsBinomial.make(preds.vec(2), labels, fullDomain);
-      Log.info(mm.toString());
-
+      Log.info("mm  : AUC = " + mm.auc());
+      Log.info("mm  : Log Loss = " + mm._logloss);
+      Log.info("mm  : Mean Square Error = " + mm._MSE);
+      System.out.println("\n");
       mm = ModelMetricsBinomial.make(preds.vec(2), labels, new String[]{"NO","1"});
-      Log.info(mm.toString());
+      Log.info("mm  : AUC = " + mm.auc());
+      Log.info("mm  : Log Loss = " + mm._logloss);
+      Log.info("mm  : Mean Square Error = " + mm._MSE);
 
     } catch(Throwable t) {
       t.printStackTrace();
@@ -2216,13 +2222,19 @@ public class DeepLearningTest extends TestUtil {
       Vec targets = train.vec("age"); //actual
 
       ModelMetricsRegression mm = ModelMetricsRegression.make(preds.vec(0), targets, parms._distribution);
-      Log.info(mm.toString());
-
+      Log.info("mm with distribution = Laplace  : Mean Square Error = " + mm._MSE);
+      Log.info("mm with distribution = Laplace  : Mean Absolute Error = " + mm._mean_absolute_error);
+      Log.info("mm with distribution = Laplace  : Mean Residula Deviance = " + mm._mean_residual_deviance);
+      System.out.println("\n");
       mm = ModelMetricsRegression.make(preds.vec(0), targets, gaussian);
-      Log.info(mm.toString());
-
+      Log.info("mm with distribution = Gaussian  : Mean Square Error = " + mm._MSE);
+      Log.info("mm with distribution = Gaussian  : Mean Absolute Error = " + mm._mean_absolute_error);
+      Log.info("mm with distribution = Gaussian  : Mean Residula Deviance = " + mm._mean_residual_deviance);
+      System.out.println("\n");
       mm = ModelMetricsRegression.make(preds.vec(0), targets, poisson);
-      Log.info(mm.toString());
+      Log.info("mm with distribution = Poisson  : Mean Square Error = " + mm._MSE);
+      Log.info("mm with distribution = Poisson  : Mean Absolute Error = " + mm._mean_absolute_error);
+      Log.info("mm with distribution = Poisson  : Mean Residula Deviance = " + mm._mean_residual_deviance);
 
     } catch(Throwable t) {
       t.printStackTrace();
