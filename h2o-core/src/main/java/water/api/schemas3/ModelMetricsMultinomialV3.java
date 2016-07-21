@@ -9,8 +9,6 @@ import water.util.TwoDimTable;
 
 public class ModelMetricsMultinomialV3<I extends ModelMetricsMultinomial, S extends ModelMetricsMultinomialV3<I, S>>
     extends ModelMetricsBaseV3<I, S> {
-  @API(help="The R^2 for this scoring run.", direction=API.Direction.OUTPUT)
-  public double r2;
 
   @API(help="The hit ratio table for this scoring run.", direction=API.Direction.OUTPUT, level= API.Level.expert)
   public TwoDimTableV3 hit_ratio_table;
@@ -28,7 +26,6 @@ public class ModelMetricsMultinomialV3<I extends ModelMetricsMultinomial, S exte
   public S fillFromImpl(I modelMetrics) {
     super.fillFromImpl(modelMetrics);
     logloss = modelMetrics._logloss;
-    r2 = modelMetrics.r2();
 
     if (modelMetrics._hit_ratios != null) {
       TwoDimTable table = getHitRatioTable(modelMetrics._hit_ratios);

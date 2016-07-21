@@ -10,9 +10,6 @@ public class ModelMetricsBinomialV3<I extends ModelMetricsBinomial, S extends Mo
 //  @API(help="The standard deviation of the training response.", direction=API.Direction.OUTPUT)
 //  public double sigma; // Belongs in a mythical ModelMetricsSupervisedV3
 
-  @API(help="The R^2 for this scoring run.", direction=API.Direction.OUTPUT)
-  public double r2;
-
   @API(help="The logarithmic loss for this scoring run.", direction=API.Direction.OUTPUT)
   public double logloss;
 
@@ -44,7 +41,6 @@ public class ModelMetricsBinomialV3<I extends ModelMetricsBinomial, S extends Mo
   public S fillFromImpl(ModelMetricsBinomial modelMetrics) {
     super.fillFromImpl(modelMetrics);
 //    sigma = modelMetrics._sigma;
-    r2 = modelMetrics.r2();
     logloss = modelMetrics._logloss;
     mean_per_class_error = modelMetrics._mean_per_class_error;
 
