@@ -592,7 +592,7 @@ public final class DHistogram extends Iced {
     return new DTree.Split(col,best,nasplit,bs,equal,seBefore,best_seL, best_seR, nLeft, nRight, predLeft / nLeft, predRight / nRight);
   }
 
-  public void updateSharedHistosAndReset(double[] w, double[] wY, double[] wYY, double[] ws, double[] cs, double[] ys, int [] rows, int hi, int lo) {
+  public void updateSharedHistosAndReset(ScoreBuildHistogram.LocalHisto lh, double[] ws, double[] cs, double[] ys, int [] rows, int hi, int lo) {
     double minmax[] = new double[]{_min2,_maxIn};
     // Gather all the data for this set of rows, for 1 column and 1 split/NID
     // Gather min/max, wY and sum-squares.
@@ -615,9 +615,9 @@ public final class DHistogram extends Iced {
       } else {
         // increment local pre-thread histograms
         int b = bin(col_data);
-        w[b] += weight;
-        wY[b] += wy;
-        wYY[b] += wyy;
+        lh.wAdd(b,weight);
+        lh.wYAdd(b,wy);
+        lh.wYYAdd(b,wyy);
       }
     }
 
@@ -627,10 +627,10 @@ public final class DHistogram extends Iced {
 
     final int len = _w.length;
     for( int b=0; b<len; b++ ) { // Bump counts in weighted counts and reset the temp arrays to 0
-      if( w[b] != 0 ) { AtomicUtils.DoubleArray.add(_w,b,w[b]); w[b]=0; }
+      if( lh.w(b) != 0 ) { AtomicUtils.DoubleArray.add(_w,b,lh.w(b)); lh.wClear(b); }
     }
     for( int b=0; b<len; b++ ) { // Bump counts in weighted response and response^2 and reset the temp arrays to 0
-      if( wY[b] != 0 || wYY[b] != 0 ) { incr1(b,wY[b],wYY[b]); wY[b]=wYY[b]=0; }
+      if( lh.wY(b) != 0 || lh.wYY(b) != 0 ) { incr1(b,lh.wY(b),lh.wYY(b)); lh.wYClear(b); lh.wYYClear(b); }
     }
   }
 
